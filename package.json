@@ -1,0 +1,19 @@
+{
+  "name": "checkly-otel-demo",
+  "version": "1.0.0",
+  "description": "Checkly synthetic monitoring for the OpenTelemetry Demo (Astronomy Shop)",
+  "private": true,
+  "scripts": {
+    "test": "npx checkly test",
+    "test:record": "npx checkly test --record",
+    "deploy": "npx checkly deploy",
+    "deploy:preview": "npx checkly deploy --preview",
+    "local": "npx playwright test src/__checks__/checkout-flow.spec.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.51.1",
+    "checkly": "^6.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}
