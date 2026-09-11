@@ -81,8 +81,6 @@ const sel = {
 test.describe.configure({ mode: 'serial' })
 
 test(`checkout journey [${CURRENCY} / ${locale.country}]`, async ({ page }) => {
-  test.setTimeout(90_000)
-
   await test.step('storefront loads', async () => {
     const response = await page.goto(BASE_URL, { waitUntil: 'domcontentloaded' })
     expect(response?.status(), 'storefront HTTP status').toBeLessThan(400)
