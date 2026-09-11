@@ -1,4 +1,4 @@
-import { Frequency, UrlMonitor, UrlAssertionBuilder } from 'checkly/constructs'
+import { Frequency, UrlMonitor, UrlAssertionBuilder, RetryStrategyBuilder } from 'checkly/constructs'
 import { sreOncall } from './alert-channels'
 
 /**
@@ -19,10 +19,15 @@ const BASE_URL = process.env.ENVIRONMENT_URL ?? 'http://localhost:8080'
 new UrlMonitor('storefront-uptime', {
   name: 'Astronomy Shop - storefront uptime',
   activated: true,
-  frequency: Frequency.EVERY_1M,
-  locations: ['eu-west-1', 'us-east-1'],
+  frequency: Frequency.EVERY_2M,
+  locations: ['eu-central-1', 'us-east-1'],
   tags: ['uptime', 'astronomy-shop'],
   alertChannels: [sreOncall],
+  // Monitors don't inherit the project's default retryStrategy the way
+  // ApiCheck/BrowserCheck do, and this account's plan doesn't support a
+  // custom retry strategy on monitors at all. No retries fits the check's
+  // own point anyway: cheapest, fastest, most direct signal.
+  retryStrategy: RetryStrategyBuilder.noRetries(),
   degradedResponseTime: 1500,
   maxResponseTime: 5000,
   request: {
