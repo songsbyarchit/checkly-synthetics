@@ -35,8 +35,13 @@ for (const currency of CURRENCIES) {
     group: checkoutGroup,
     frequency: Frequency.EVERY_5M,
     // Browser checks have no degraded-response-time threshold in this SDK,
-    // that's an API/monitor check concept only. This is just the hard
-    // timeout for the whole Playwright run.
+    // that's an API/monitor check concept only. Deliberately generous here:
+    // this demo runs over a home tunnel, where measured network jitter
+    // (9-20s) is bigger than the 5s intlShippingSlowdown delay we're
+    // demonstrating, so a tight timeout would false-fail on noise. The
+    // signal for the demo is the per-check duration trend in the Checkly
+    // dashboard, not pass/fail, so this timeout only needs to be a safety
+    // net against a genuine hang, not a detector.
     playwrightConfig: {
       timeout: 45_000,
     },
