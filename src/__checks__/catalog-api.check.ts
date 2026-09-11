@@ -20,7 +20,7 @@ export const apiGroup = new CheckGroup('astronomy-api-checks', {
   name: 'Astronomy Shop / Service APIs',
   activated: true,
   concurrency: 3,
-  locations: ['eu-west-1'],
+  locations: ['eu-central-1'],
   tags: ['api', 'astronomy-shop'],
   alertChannels: [sreOncall],
 })

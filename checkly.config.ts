@@ -19,7 +19,7 @@ export default defineConfig({
     muted: false,
     runtimeId: '2025.04',
     frequency: Frequency.EVERY_5M,
-    locations: ['eu-west-1', 'us-east-1'],
+    locations: ['eu-central-1', 'us-east-1'],
     tags: ['astronomy-shop', 'otel-demo'],
     checkMatch: '**/__checks__/**/*.check.ts',
     // Two retries 30s apart before alerting. A single failed run on a
@@ -35,7 +35,7 @@ export default defineConfig({
     },
   },
   cli: {
-    runLocation: 'eu-west-1',
+    runLocation: 'eu-central-1',
     reporters: ['list'],
   },
 })

@@ -21,7 +21,7 @@ export const checkoutGroup = new CheckGroup('astronomy-checkout-journeys', {
   name: 'Astronomy Shop / Checkout journeys',
   activated: true,
   concurrency: 4,
-  locations: ['eu-west-1', 'us-east-1'],
+  locations: ['eu-central-1', 'us-east-1'],
   tags: ['checkout', 'revenue-path'],
   alertChannels: [qualityEngineering, sreOncall],
   environmentVariables: [
