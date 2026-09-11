@@ -21,12 +21,12 @@ const sendDefaults = {
 }
 
 export const qualityEngineering = new EmailAlertChannel('qe-alerts', {
-  address: 'quality-engineering@example.com',
+  address: 'archit.sachdeva007+qe@gmail.com',
   ...sendDefaults,
 })
 
 export const sreOncall = new EmailAlertChannel('sre-oncall', {
-  address: 'sre-oncall@example.com',
+  address: 'archit.sachdeva007+sre@gmail.com',
   ...sendDefaults,
   // Recovery notifications matter more to the on-call rotation than to QE:
   // it is the difference between "still broken" and "self-healed at 09:47".
