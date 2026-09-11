@@ -1,4 +1,4 @@
-import { BrowserCheck, CheckGroup, Frequency } from 'checkly/constructs'
+import { BrowserCheck, CheckGroup, Frequency, RetryStrategyBuilder } from 'checkly/constructs'
 import { qualityEngineering, sreOncall } from './alert-channels'
 
 /**
@@ -44,6 +44,12 @@ for (const currency of CURRENCIES) {
     playwrightConfig: {
       timeout: 14_000,
     },
+    // Overrides the project's default 2-retry strategy. Retries exist to
+    // stop a single network blip from paging someone - the right call for
+    // the API checks. But this check's whole job is to catch the first
+    // sign of a currency-scoped incident, so masking a genuine first
+    // failure with a lucky cross-region retry defeats the point of it.
+    retryStrategy: RetryStrategyBuilder.noRetries(),
     tags: ['checkout', `currency:${currency.toLowerCase()}`],
     environmentVariables: [{ key: 'CURRENCY_CODE', value: currency }],
     code: {
