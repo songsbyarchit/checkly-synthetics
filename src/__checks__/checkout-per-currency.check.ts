@@ -24,6 +24,11 @@ export const checkoutGroup = new CheckGroup('astronomy-checkout-journeys', {
   locations: ['eu-central-1', 'us-east-1'],
   tags: ['checkout', 'revenue-path'],
   alertChannels: [qualityEngineering, sreOncall],
+  // Setting noRetries() on each check alone isn't enough: it synthesizes to
+  // retryStrategy: null, which Checkly treats as "inherit from the group,"
+  // and this group otherwise falls back to a platform default retry. Has
+  // to be set here explicitly too, or retries silently keep happening.
+  retryStrategy: RetryStrategyBuilder.noRetries(),
   environmentVariables: [
     { key: 'ENVIRONMENT_URL', value: process.env.ENVIRONMENT_URL ?? 'http://localhost:8080' },
   ],
