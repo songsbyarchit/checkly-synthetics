@@ -39,16 +39,6 @@ for (const currency of CURRENCIES) {
     name: `Checkout journey - ${currency}`,
     group: checkoutGroup,
     frequency: Frequency.EVERY_5M,
-    // Browser checks have no degraded-response-time threshold in this SDK,
-    // that's an API/monitor check concept only, so this timeout is the
-    // pass/fail line itself. Measured over the named tunnel with
-    // intlShippingSlowdown set to its 10sec variant (not 5sec - the bigger
-    // gap holds up against tunnel jitter far more reliably): domestic (USD)
-    // stayed 11.3-11.9s across repeated runs, international (EUR/GBP/JPY)
-    // never dropped below 17.7s. 14s sits with real margin on both sides.
-    playwrightConfig: {
-      timeout: 14_000,
-    },
     // Overrides the project's default 2-retry strategy. Retries exist to
     // stop a single network blip from paging someone - the right call for
     // the API checks. But this check's whole job is to catch the first
@@ -60,5 +50,21 @@ for (const currency of CURRENCIES) {
     code: {
       entrypoint: './checkout-flow.spec.ts',
     },
+    // IMPORTANT: the actual pass/fail threshold for these checks is NOT
+    // expressible in this file. degradedResponseTime/maxResponseTime are
+    // real fields on the Checkly platform for browser checks, but this
+    // project's checkly SDK (6.9.10, several majors behind current) doesn't
+    // wire them through BrowserCheck's constructor at all - not just a type
+    // restriction, the JS silently drops them even with a type-cast.
+    // playwrightConfig.timeout looked like the SDK-sanctioned alternative,
+    // but a separate CLI bug in this version drops it on deploy too
+    // (confirmed via the API: stayed null after multiple successful-looking
+    // deploys). The threshold that's actually live was set via a direct API
+    // PUT to maxResponseTime/degradedResponseTime, outside this codebase,
+    // and is NOT reapplied by `checkly deploy` - a deploy resets it back to
+    // the SDK's 20s default. Validated: domestic (USD) stayed 9.4-10.9s
+    // across repeated runs, international (EUR/GBP/JPY) never dropped below
+    // 16.0s. 13s sits with real margin on both sides. Upgrading the checkly
+    // package to current would let this be expressed here properly.
   })
 }
