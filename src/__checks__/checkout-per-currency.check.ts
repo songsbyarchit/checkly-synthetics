@@ -34,11 +34,12 @@ for (const currency of CURRENCIES) {
     name: `Checkout journey - ${currency}`,
     group: checkoutGroup,
     frequency: Frequency.EVERY_5M,
-    // Fails at 45s, warns at 20s. The demo's own flagd evaluation path can
-    // spike to ~5s under the failure scenario, so the degraded threshold is
-    // set to catch that long before the hard timeout does.
-    degradedResponseTime: 20_000,
-    maxResponseTime: 45_000,
+    // Browser checks have no degraded-response-time threshold in this SDK,
+    // that's an API/monitor check concept only. This is just the hard
+    // timeout for the whole Playwright run.
+    playwrightConfig: {
+      timeout: 45_000,
+    },
     tags: ['checkout', `currency:${currency.toLowerCase()}`],
     environmentVariables: [{ key: 'CURRENCY_CODE', value: currency }],
     code: {
